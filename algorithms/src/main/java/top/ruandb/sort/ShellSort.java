@@ -32,16 +32,16 @@ public class ShellSort {
 	
 	public static void main(String[] args) {		
 		
-		int[] array =ArrayUtil.generateRandomArray(100, 0, 10);
+		int[] array =ArrayUtil.generateRandomArray(1000000, 0, 1000000);
 		ShellSort ss = new ShellSort();
 		
-		ArrayUtil.printArray(array);
-		ArrayUtil.printArray(ss.shellSort(array));
+//		ArrayUtil.printArray(array);
+//		ArrayUtil.printArray(ss.shellSort(array));
 		
-//		long startTime = System.currentTimeMillis();
-//		ss.shellSort(array);
-//		long endTime = System.currentTimeMillis();
-//		System.out.println(endTime-startTime + "ms");
+		long startTime = System.currentTimeMillis();
+		ss.shellSort(array);
+		long endTime = System.currentTimeMillis();
+		System.out.println(endTime-startTime + "ms");
 	}
 	
 }

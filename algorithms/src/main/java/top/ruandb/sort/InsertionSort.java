@@ -33,7 +33,7 @@ public class InsertionSort {
 	}
 	
 	public static void main(String[] args) {
-		int[] array =ArrayUtil.generateRandomArray(10000, 0, 1000000);
+		int[] array =ArrayUtil.generateRandomArray(1000, 0, 1000000);
 		InsertionSort is = new InsertionSort();
 		
 //		ArrayUtil.printArray(array);

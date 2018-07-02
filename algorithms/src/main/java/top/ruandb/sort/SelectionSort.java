@@ -36,7 +36,7 @@ public class SelectionSort {
 	
 	
 	public static void main(String[] args) {
-		int[] array = ArrayUtil.generateRandomArray(10000, 0, 1000000);
+		int[] array = ArrayUtil.generateRandomArray(1000, 0, 1000000);
 		SelectionSort ss = new SelectionSort();
 		
 //		ArrayUtil.printArray(array);
