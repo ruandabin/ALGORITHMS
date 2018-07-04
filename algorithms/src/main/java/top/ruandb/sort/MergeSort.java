@@ -28,9 +28,9 @@ public class MergeSort {
 		
 		if(left < right) {
 			int mid = (left + right)/2 ;
-			sort(array,left,mid,temp);
-			sort(array,mid+1,right,temp);
-			merge(array,left,mid,right,temp);
+			sort(array,left,mid,temp);//左边归并排序，使得左子序列有序
+			sort(array,mid+1,right,temp);//右边归并排序，使得右子序列有序
+			merge(array,left,mid,right,temp);//将两个有序子数组合并操作
 		}
 		return array;
 	}
@@ -65,6 +65,7 @@ public class MergeSort {
 		
 		t=0;
 		
+		//将temp中的元素全部拷贝到原数组中
 		while(left <= right) {
 			array[left++] = temp[t++] ;
 		}
