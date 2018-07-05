@@ -9,6 +9,7 @@ import top.ruandb.utils.ArrayUtil;
  */
 public class QuickSort {
 
+	//快速排序
 	public int[] quickSort(int[] array) {
 		sort(array,0,array.length-1);
 		return array;
@@ -16,14 +17,16 @@ public class QuickSort {
 	
 	private void sort(int[] array,int left,int right) {
 		if(left < right) {
-			int partition = divide( array, left, right);
+			int partition = divide( array, left, right);//两头交换法
+//			int partition = divide1( array, left, right);//标准法
 			sort(array, left, partition-1);
 			sort(array, partition+1, right);
 		}
 	}
 	
+	//两头交换法
 	private int  divide(int[] array,int left,int right) {
-		int base = array[left]; //基准点
+		int base = array[left]; //基准点,以第一个元素为基准点
 		int i = left;
 		int j = right;
 		int temp;
@@ -31,7 +34,6 @@ public class QuickSort {
 			while(i < j && base <= array[j]) {
 				j--;
 			}
-			//System.out.println(j);
 			if(i == j){
 				temp = array[j];
 				array[j] = base;
@@ -41,10 +43,6 @@ public class QuickSort {
 			while(i < j && base >= array[i]) {
 				i++;
 			}
-			//System.out.println(i);
-			//ArrayUtil.printArray(array);
-			//System.out.println(array[i]+"****"+array[j]);
-			
 			if(i == j){
 				temp = array[j];
 				array[j] = base;
@@ -59,22 +57,42 @@ public class QuickSort {
 		return i;
 	}
 	
+	//标准写法
+	private int  divide1(int[] array,int left,int right) {
+		int base = array[left]; //基准点,以第一个元素为基准点
+		int i = left;
+		int j = right;
+		int temp;
+		while(i < j ) {
+			while(i < j && base <= array[j]) {
+				j--;
+			}
+			if(i < j) {
+				temp = array[j] ;
+				array[j] = base;
+				array[i] = temp;
+			}
+			
+			
+			while(i < j && base >= array[i]) {
+				i++;
+			}
+			if(i < j) {
+				temp = array[i];
+				array[i] = base;
+				array[j] = temp;
+			}
+		}
+		return i;
+	}
+	
 	public static void main(String[] args) {
 		int[] array = ArrayUtil.generateRandomArray(1000000, 0, 1000000);
-		//int[] array = {5, 9 ,10 ,17 ,7, 10, 14 ,9 ,9 ,10};
-		//int[] array = {7 ,1, 0 ,10};
-		
-		
 		QuickSort qs = new QuickSort();
+		
 //		ArrayUtil.printArray(array);
 //		ArrayUtil.printArray(qs.quickSort(array));
-		
-		
-		//qs.divide(array, 0, array.length-1);
-		//qs.sort(array, 0, array.length-1);
-		//ArrayUtil.printArray(array);
-		
-		
+				
 		long startTime = System.currentTimeMillis();
 		qs.quickSort(array);
 		long endTime = System.currentTimeMillis();
