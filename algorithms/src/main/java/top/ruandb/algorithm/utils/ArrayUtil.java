@@ -1,4 +1,4 @@
-package top.ruandb.utils;
+package top.ruandb.algorithm.utils;
 
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class ArrayUtil {
 
 	/**
-	 * 生产长度为n的随机数组,数组值的边界是[rangeL,angeR]
+	 * 生产长度为n的随机数�?,数组值的边界是[rangeL,angeR]
 	 *@param n 数组长度
 	 *@param rangeL 数组值边界[rangeL,angeR]
 	 *@param rangeR 数组值边界[rangeL,angeR]

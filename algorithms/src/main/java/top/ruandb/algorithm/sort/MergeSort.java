@@ -1,6 +1,6 @@
-package top.ruandb.sort;
+package top.ruandb.algorithm.sort;
 
-import top.ruandb.utils.ArrayUtil;
+import top.ruandb.algorithm.utils.ArrayUtil;
 
 /**
  * πÈ≤¢≈≈–Ú
