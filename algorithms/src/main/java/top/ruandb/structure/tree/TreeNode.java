@@ -1,6 +1,6 @@
 package top.ruandb.structure.tree;
 /**
- * 树节点（二叉链表）
+ * 树节点（三叉链表，也可当二叉链表用）
  * @author rdb
  *
  */
@@ -8,10 +8,12 @@ public class TreeNode<T> {
 	private final T value ;
 	private TreeNode left ;
 	private TreeNode right ;
+	private TreeNode parent;
 	public TreeNode(T value) {
 		this.value = value ;
 		this.left = null ;
 		this.right = null ;
+		this.parent = null ;
 	}
 	public TreeNode getLeft() {
 		return left;
@@ -28,5 +30,12 @@ public class TreeNode<T> {
 	public T getValue() {
 		return value;
 	}
+	public TreeNode getParent() {
+		return parent;
+	}
+	public void setParent(TreeNode parent) {
+		this.parent = parent;
+	}
+	
 	
 }
