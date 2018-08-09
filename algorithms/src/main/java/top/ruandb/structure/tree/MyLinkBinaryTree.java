@@ -79,8 +79,16 @@ public class MyLinkBinaryTree<T> {
 
 	// 返回父节点
 	public T parent(TreeNode<T> child) {
-		return null;
+		//利用前序遍历
+		List<TreeNode<T>> list = preIterator(root);
+		for(TreeNode<T> n : list){
+			if(n.getLeft() == child || n.getRight() == child){
+				return n.getValue() ;
+			}
+		}
+		return null ;
 	}
+
 
 	// 返回指定节点的左子节点
 	@SuppressWarnings("unchecked")
@@ -119,8 +127,8 @@ public class MyLinkBinaryTree<T> {
 	}
 
 	/**
-	 * 前序遍历
-	 *先根几点，递归左子树，递归右子树
+	 * 前序遍历 先根节点，递归左子树，递归右子树
+	 * 
 	 * @param node
 	 * @return
 	 */
@@ -128,42 +136,81 @@ public class MyLinkBinaryTree<T> {
 		return preIterator(root);
 	}
 
-	private List<TreeNode<T>> preIterator(TreeNode<T> node){
-		
+	private List<TreeNode<T>> preIterator(TreeNode<T> node) {
+
 		List<TreeNode<T>> list = new ArrayList<TreeNode<T>>();
-		
+
 		list.add(node);
-		//递归左子树
-		if(node.getLeft() != null ){
+		// 递归左子树
+		if (node.getLeft() != null) {
 			List<TreeNode<T>> lLift = preIterator(node.getLeft());
 			list.addAll(lLift);
 		}
-		//递归右子树
-		if(node.getRight() != null){
+		// 递归右子树
+		if (node.getRight() != null) {
 			List<TreeNode<T>> lRight = preIterator(node.getRight());
 			list.addAll(lRight);
 		}
 		return list;
 	}
-	
+
 	/**
-	 * 中序遍历
-	 *
+	 * 中序遍历 递归左子树，根节点，递归右子树
+	 * 
 	 * @param node
 	 * @return
 	 */
-	public List<TreeNode<T>> inIterator(TreeNode<T> node) {
-		return null;
+	public List<TreeNode<T>> inIterator() {
+		return inIterator(root);
 	}
-	
+
+	private List<TreeNode<T>> inIterator(TreeNode<T> node) {
+		List<TreeNode<T>> list = new ArrayList<TreeNode<T>>();
+
+		// 左子树
+		if (node.getLeft() != null) {
+			List lList = inIterator(node.getLeft());
+			list.addAll(lList);
+		}
+		// 根
+		list.add(node);
+		// 右子树
+		if (node.getRight() != null) {
+			List rList = inIterator(node.getRight());
+			list.addAll(rList);
+		}
+
+		return list;
+	}
+
 	/**
-	 * 后序遍历
-	 *
+	 * 后序遍历 递归左子树，递归右子树，根节点
+	 * 
 	 * @param node
 	 * @return
 	 */
-	public List<TreeNode<T>> postIterator(TreeNode<T> node) {
-		return null;
+	public List<TreeNode<T>> postIterator() {
+		return postIterator(root);
+	}
+
+	private List<TreeNode<T>> postIterator(TreeNode<T> node) {
+		List<TreeNode<T>> list = new ArrayList<TreeNode<T>>();
+
+		// 左子树
+		if (node.getLeft() != null) {
+			List lList = postIterator(node.getLeft());
+			list.addAll(lList);
+		}
+		// 右子树
+		if (node.getRight() != null) {
+			List rList = postIterator(node.getRight());
+			list.addAll(rList);
+		}
+
+		// 根
+		list.add(node);
+
+		return list;
 	}
 
 	public static void main(String[] args) {
@@ -179,10 +226,20 @@ public class MyLinkBinaryTree<T> {
 
 		System.out.println(my.root().getValue());
 		System.out.println(my.root().getLeft().getValue());
-		System.out.println(my.parent(n21));
+		System.out.println(my.parent(n41));
 		System.out.println(my.leftChild(n21));
 		System.out.println(my.rightChild(n21));
 		System.out.println(my.deep());
+
+		List<TreeNode<String>> list = my.preIterator(my.root);
+		my.preIterator(my.root).stream()
+				.forEach(e -> System.out.print(e.getValue() + "   "));
+		System.out.println();
+		my.inIterator(my.root).stream()
+				.forEach(e -> System.out.print(e.getValue() + "   "));
+		System.out.println();
+		my.postIterator(my.root).stream()
+				.forEach(e -> System.out.print(e.getValue() + "   "));
 	}
 
 }
