@@ -1,7 +1,9 @@
 package top.ruandb.structure.tree;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * 排序二叉树
@@ -77,18 +79,18 @@ public class SoftedBinaryTree<T extends Comparable> {
 	}
 
 	// 删除节点
+	@SuppressWarnings("unchecked")
 	public void remove(T element) {
 		TreeNode<T> node = getNode(element);
 		if (node == null) {
 			return;
 		}
-		if (node == root) {
-			root = null;
-			return;
-		}
 		// 删除的节点是叶子节点
 		if (node.getLeft() == null && node.getRight() == null) {
-			// 删除的是根节点
+			if(node == root){
+				return ;
+			}
+			//判断node是左子节点还是右子节点
 			if (node.getParent().getLeft() == node) {
 				node.getParent().setLeft(null);
 			} else {
@@ -99,8 +101,14 @@ public class SoftedBinaryTree<T extends Comparable> {
 		}
 		// 删除的节点只有左子树
 		if (node.getLeft() != null && node.getRight() == null) {
+			if(node == root ){
+				root = node.getLeft() ;
+				root.setParent(null);
+				node.setLeft(null);
+				return ;
+			}
 			// node在左子树
-			if (node.getParent().getLeft() == node) {
+		    if (node.getParent().getLeft() == node) {
 				node.getParent().setLeft(node.getLeft());
 			}
 			// node在右子树
@@ -112,8 +120,14 @@ public class SoftedBinaryTree<T extends Comparable> {
 		}
 		// 删除的节点只有右子树
 		if (node.getLeft() == null && node.getRight() != null) {
+			if(node == root ){
+				root = node.getRight() ;
+				root.setParent(null);
+				node.setRight(null);
+				return ;
+			}
 			// node在左子树
-			if (node.getParent().getLeft() == node) {
+		    if (node.getParent().getLeft() == node) {
 				node.getParent().setLeft(node.getRight());
 			}
 			// node在右子树
@@ -125,22 +139,39 @@ public class SoftedBinaryTree<T extends Comparable> {
 		}
 		// 删除的节点既有左子树又有右子树
 		if (node.getLeft() != null && node.getRight() != null) {
-
 			// 找到节点右子树中的最小值节点
-			TreeNode rightMinNode = node.getRight();
+			TreeNode<T> rightMinNode = node.getRight();
 			while (rightMinNode.getLeft() != null) {
 				rightMinNode = rightMinNode.getLeft();
 			}
-			rightMinNode.getParent().setLeft(null);
-			rightMinNode.setParent(node.getParent());
-			// node左子树
-			if (node.getParent().getLeft() == null) {
-				rightMinNode.getParent().setLeft(rightMinNode);
-			} else {
-				rightMinNode.getParent().setRight(rightMinNode);
+			
+			//断开rightMinNode
+			//上面循环后rightMinNode可能是叶子节点或者只有右子节点
+			if(rightMinNode.getParent().getLeft() == rightMinNode){
+				rightMinNode.getParent().setLeft(rightMinNode.getRight());
+			}else{
+				rightMinNode.getParent().setRight(rightMinNode.getRight());
 			}
+			//rightMinNode连接到node位置
+			rightMinNode.setParent(node.getParent());
 			rightMinNode.setLeft(node.getLeft());
-			rightMinNode.setLeft(node.getRight());
+			rightMinNode.setRight(node.getRight());
+			//根
+			if(node == root){
+				root = rightMinNode ;
+				node.setLeft(null);
+				node.setRight(null);
+				return;
+			}
+			
+			// node是左子树
+			if (node.getParent().getLeft() == node) {
+				node.getParent().setLeft(rightMinNode);
+			} 
+			//node是右子树
+			else {
+				node.getParent().setRight(rightMinNode);
+			}
 			node.setParent(null);
 			node.setLeft(null);
 			node.setRight(null);
@@ -154,20 +185,50 @@ public class SoftedBinaryTree<T extends Comparable> {
 	 * @return
 	 */
 	public List<TreeNode<T>> inIterator() {
-		return inTerator(root);
+		return inIterator(root);
 	}
 
-	private List<TreeNode<T>> inTerator(TreeNode<T> node) {
+	private List<TreeNode<T>> inIterator(TreeNode<T> node) {
 		List<TreeNode<T>> list = new ArrayList<TreeNode<T>>();
 
 		if (node.getLeft() != null) {
-			List<TreeNode<T>> lList = inTerator(node.getLeft());
+			List<TreeNode<T>> lList = inIterator(node.getLeft());
 			list.addAll(lList);
 		}
 		list.add(node);
 		if (node.getRight() != null) {
-			List<TreeNode<T>> rList = inTerator(node.getRight());
+			List<TreeNode<T>> rList = inIterator(node.getRight());
 			list.addAll(rList);
+		}
+		return list;
+	}
+
+	/**
+	 * 广度优先遍历，即按层遍历 利用队列实现 算法：1、新建一个队列，存入根节点 2、取出根节点，判断根节点的左右子节点，有就存入队列
+	 * 3、重复2步，知道队列为空
+	 * 
+	 * @return
+	 */
+	public List<TreeNode> breadthFirst() {
+		// 初始化一个队列
+		Queue<TreeNode> queue = new ArrayDeque<>();
+		// 存放遍历好的节点
+		List<TreeNode> list = new ArrayList<>();
+		if (root != null) {
+			queue.offer(root);
+		}
+		while (!queue.isEmpty()) {
+			// 队头元素放入list
+			list.add(queue.peek());
+			// 出队
+			TreeNode parent = queue.poll();
+			// 按层将数据遍历存放到队列
+			if (parent.getLeft() != null) {
+				queue.offer(parent.getLeft());
+			}
+			if (parent.getRight() != null) {
+				queue.offer(parent.getRight());
+			}
 		}
 		return list;
 	}
@@ -185,13 +246,25 @@ public class SoftedBinaryTree<T extends Comparable> {
 		sbt.add(13);
 		sbt.add(21);
 		System.out.println(sbt.root.getValue());
-		System.out.println(sbt.getNode(9).getParent().getValue());
-		sbt.inTerator(sbt.root()).stream()
+		System.out.println(sbt.getNode(18).getValue());
+		// 中序遍历
+		sbt.inIterator().stream()
 				.forEach(e -> System.out.print(e.getValue() + "  "));
 		System.out.println();
-		sbt.remove(9);
-		System.out.println(sbt.root.getValue());
-		sbt.inTerator(sbt.root()).stream()
+		// 广度遍历
+		sbt.breadthFirst().stream()
 				.forEach(e -> System.out.print(e.getValue() + "  "));
+		System.out.println();
+
+		sbt.remove(3);
+		// 中序遍历
+		sbt.inIterator().stream()
+				.forEach(e -> System.out.print(e.getValue() + "  "));
+		System.out.println();
+		// 广度遍历
+		sbt.breadthFirst().stream()
+				.forEach(e -> System.out.print(e.getValue() + "  "));
+		System.out.println();
+
 	}
 }
